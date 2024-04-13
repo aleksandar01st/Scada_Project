@@ -10,7 +10,7 @@ namespace ProcessingModule
 	/// </summary>
 	public class AutomationManager : IAutomationManager, IDisposable
 	{
-		private Thread automationWorker;
+		private Thread automationWorker1;
 		private Thread automationWorker2;
 		private AutoResetEvent automationTrigger;
 		private IStorage storage;
@@ -47,11 +47,11 @@ namespace ProcessingModule
 		/// </summary>
 		private void InitializeAutomationWorkerThread()
 		{
-			automationWorker = new Thread(AutomationWorker_DoWork);
-			automationWorker.Name = "Automation Thread";
+			automationWorker1 = new Thread(AutomationWorker_DoWork1);
+			automationWorker1.Name = "Aumation Thread";
 
 			automationWorker2 = new Thread(AutomationWorker_DoWork2);
-			automationWorker2.Name = "Automation Thread";
+			automationWorker2.Name = "Aumation Thread";
 		}
 
 		/// <summary>
@@ -59,19 +59,16 @@ namespace ProcessingModule
 		/// </summary>
 		private void StartAutomationWorkerThread()
 		{
-			automationWorker.Start();
+			automationWorker1.Start();
 			automationWorker2.Start();
 		}
 
 
-		private void AutomationWorker_DoWork()
+		private void AutomationWorker_DoWork1()
 		{
-			//while (!disposedValue)
-			//{
-			//}
 			PointIdentifier l1 = new PointIdentifier(PointType.DIGITAL_OUTPUT, 4900);
 			PointIdentifier l2 = new PointIdentifier(PointType.DIGITAL_OUTPUT, 4901);
-			List<PointIdentifier> list = new List<PointIdentifier> { l2, l1 };
+			List<PointIdentifier> list = new List<PointIdentifier> { l1, l2 };
 			while (!disposedValue)
 			{
 				List<IPoint> points = storage.GetPoints(list);
@@ -84,13 +81,13 @@ namespace ProcessingModule
 
 		private void AutomationWorker_DoWork2()
 		{
-			PointIdentifier p1 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2500);
-			PointIdentifier p2 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2501);
-			PointIdentifier g1 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2503);
 			PointIdentifier s1 = new PointIdentifier(PointType.ANALOG_INPUT, 2000);
 			PointIdentifier s2 = new PointIdentifier(PointType.ANALOG_INPUT, 2001);
 			PointIdentifier s3 = new PointIdentifier(PointType.ANALOG_INPUT, 2002);
-			List<PointIdentifier> list = new List<PointIdentifier> { p1, p2, g1, s1, s2, s3 };
+			PointIdentifier p1 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2500);
+			PointIdentifier p2 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2501);
+			PointIdentifier g1 = new PointIdentifier(PointType.ANALOG_OUTPUT, 2502);
+			List<PointIdentifier> list = new List<PointIdentifier> { s1, s2, s3, p1, p2, g1 };
 			while (!disposedValue)
 			{
 				List<IPoint> points = storage.GetPoints(list);
